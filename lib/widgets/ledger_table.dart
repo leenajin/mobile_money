@@ -40,13 +40,15 @@ class LedgerTable extends StatelessWidget {
   }
 
   Widget _cell(int col, String text,
-      {Color? bg, bool bold = false, bool right = false}) {
+      {Color? bg, bool bold = false, bool right = false, bool center = false}) {
     return Expanded(
       flex: _colFlexes[col],
       child: Container(
-        height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        alignment: right ? Alignment.centerRight : Alignment.centerLeft,
+        height: 26,
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        alignment: center
+            ? Alignment.center
+            : (right ? Alignment.centerRight : Alignment.centerLeft),
         decoration: BoxDecoration(
           color: bg,
           border: const Border(
@@ -58,7 +60,7 @@ class LedgerTable extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                fontSize: 11,
+                fontSize: 10,
                 fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
       ),
     );
@@ -66,12 +68,12 @@ class LedgerTable extends StatelessWidget {
 
   Widget _headerRow() => Row(children: [
         _cell(0, '', bg: _rowNumColor),
-        _cell(1, '날짜', bg: _headerColor, bold: true),
-        _cell(2, '카드', bg: _headerColor, bold: true),
-        _cell(3, '사용용도', bg: _headerColor, bold: true),
-        _cell(4, '상세', bg: _headerColor, bold: true),
-        _cell(5, '금액', bg: _headerColor, bold: true, right: true),
-        _cell(6, '비고', bg: _headerColor, bold: true),
+        _cell(1, '날짜', bg: _headerColor, bold: true, center: true),
+        _cell(2, '카드', bg: _headerColor, bold: true, center: true),
+        _cell(3, '사용용도', bg: _headerColor, bold: true, center: true),
+        _cell(4, '상세', bg: _headerColor, bold: true, center: true),
+        _cell(5, '금액', bg: _headerColor, bold: true, center: true),
+        _cell(6, '비고', bg: _headerColor, bold: true, center: true),
       ]);
 
   Widget _dataRow(int i) {
@@ -80,7 +82,7 @@ class LedgerTable extends StatelessWidget {
     return InkWell(
       onTap: () => onRowTap(e),
       child: Row(children: [
-        _cell(0, '${i + 1}', bg: _rowNumColor),
+        _cell(0, '${i + 1}', bg: _rowNumColor, center: true),
         _cell(1, row.showDate ? formatSheetDate(e.date) : ''),
         _cell(2, paymentNames[e.paymentMethodId] ?? ''),
         _cell(3, categoryNames[e.categoryId] ?? ''),
