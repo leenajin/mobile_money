@@ -7,7 +7,7 @@ import 'screens/ledger_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final db = await openAppDatabase();
-  final state = AppState(db: db);
+  final state = AppState(db);
   await state.init();
   runApp(
     ChangeNotifierProvider.value(value: state, child: const MobileMoneyApp()),

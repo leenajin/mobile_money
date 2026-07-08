@@ -12,7 +12,7 @@ void main() {
   setUp(() async {
     db = await openAppDatabase(
         factory: databaseFactoryFfi, path: inMemoryDatabasePath);
-    state = AppState(db: db, today: '2025-09-15');
+    state = AppState(db, '2025-09-15');
     await state.init();
   });
   tearDown(() => db.close());

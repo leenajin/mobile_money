@@ -9,11 +9,10 @@ import '../models/payment_method.dart';
 import 'ledger_rows.dart';
 
 class AppState extends ChangeNotifier {
-  AppState({required Database db, String? today})
+  AppState(Database db, [this._today])
       : _expenses = ExpenseRepository(db),
         _categories = CategoryRepository(db),
-        _payments = PaymentMethodRepository(db),
-        _today = today;
+        _payments = PaymentMethodRepository(db);
 
   final ExpenseRepository _expenses;
   final CategoryRepository _categories;
@@ -29,7 +28,7 @@ class AppState extends ChangeNotifier {
   void Function()? onDataChanged;
 
   String get today {
-    if (_today != null) return _today!;
+    if (_today != null) return _today;
     final now = DateTime.now();
     return '${now.year.toString().padLeft(4, '0')}-'
         '${now.month.toString().padLeft(2, '0')}-'
