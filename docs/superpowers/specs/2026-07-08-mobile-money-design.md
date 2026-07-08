@@ -90,7 +90,7 @@ Flutter(Dart)로 개발하며, 데이터는 폰에 저장하고 구글 로그인
 
 ## 기술 스택
 
-- Flutter 최신 안정 버전, 안드로이드 전용 (minSdk 23 / Android 6.0+)
+- Flutter 최신 안정 버전, 안드로이드 전용 (minSdk 24 / Android 7.0+)
 - 로컬 DB: `sqflite`
 - 상태 관리: `Provider` (ChangeNotifier)
 - 구글: `google_sign_in`, `googleapis` (Drive v3, appDataFolder)

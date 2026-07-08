@@ -49,6 +49,18 @@ void main() {
         findsOneWidget);
   });
 
+  testWidgets('중복 이름 추가 시 경고 표시, 목록 변화 없음', (tester) async {
+    await tester.pumpWidget(host());
+    final before = state.categories.length;
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '식사');
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+    expect(find.text('이미 있는 이름입니다'), findsOneWidget);
+    expect(state.categories.length, before);
+  });
+
   testWidgets('삭제 확인 후 목록에서 제거', (tester) async {
     await tester.pumpWidget(host());
     final mealTile = find.widgetWithText(ListTile, '식사');

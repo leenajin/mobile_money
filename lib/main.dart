@@ -17,6 +17,7 @@ Future<void> main() async {
       db: db,
       prefs: await SharedPreferences.getInstance());
   state.onDataChanged = backup.onDataChanged;
+  backup.restoreSession(); // 로그인 세션 복원 — await 하지 않음(시작을 막지 않는다)
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider.value(value: state),

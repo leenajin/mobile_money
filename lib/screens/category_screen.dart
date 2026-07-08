@@ -50,6 +50,16 @@ class CategoryScreen extends StatelessWidget {
     if (ok == true) await state.removeCategory(id);
   }
 
+  bool _isDuplicate(AppState state, String name, {int? excludingId}) {
+    return state.categories
+        .any((c) => c.name == name && c.id != excludingId);
+  }
+
+  void _showDuplicateWarning(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미 있는 이름입니다')));
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
@@ -58,7 +68,12 @@ class CategoryScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final name = await _nameDialog(context);
-          if (name != null) await state.addCategory(name);
+          if (name == null) return;
+          if (_isDuplicate(state, name)) {
+            if (context.mounted) _showDuplicateWarning(context);
+            return;
+          }
+          await state.addCategory(name);
         },
         child: const Icon(Icons.add),
       ),
@@ -69,7 +84,12 @@ class CategoryScreen extends StatelessWidget {
               title: Text(c.name),
               onTap: () async {
                 final name = await _nameDialog(context, initial: c.name);
-                if (name != null) await state.renameCategory(c.id!, name);
+                if (name == null) return;
+                if (_isDuplicate(state, name, excludingId: c.id)) {
+                  if (context.mounted) _showDuplicateWarning(context);
+                  return;
+                }
+                await state.renameCategory(c.id!, name);
               },
               trailing: c.isDefault
                   ? null

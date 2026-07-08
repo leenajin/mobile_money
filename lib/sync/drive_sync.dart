@@ -7,6 +7,7 @@ abstract class RemoteStore {
   bool get signedIn;
   String? get accountEmail;
   Future<bool> signIn();
+  Future<bool> signInSilently();
   Future<void> signOut();
   Future<void> upload(String json);
   Future<String?> download();
@@ -27,6 +28,12 @@ class DriveSync implements RemoteStore {
   @override
   Future<bool> signIn() async {
     _account = await _google.signInSilently() ?? await _google.signIn();
+    return _account != null;
+  }
+
+  @override
+  Future<bool> signInSilently() async {
+    _account = await _google.signInSilently();
     return _account != null;
   }
 

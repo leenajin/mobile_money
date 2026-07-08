@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- 안드로이드 전용. minSdkVersion 23.
+- 안드로이드 전용. minSdkVersion 24 (Flutter 3.44 최소 지원).
 - 커밋 메시지는 항상 한글로 작성한다.
 - 지출만 기록한다. 수입/잔액/예산 기능 금지 (YAGNI).
 - 금액은 정수(원 단위)로 저장. 날짜는 `yyyy-MM-dd` 문자열로 저장, 월 키는 `yyyy-MM`.
@@ -112,6 +112,8 @@ minSdk = 23
 ```
 
 (파일이 `build.gradle`(Groovy)라면 `minSdkVersion 23`으로 동일 위치 수정)
+
+(이후 Flutter 3.44 요구로 24로 상향됨)
 
 - [ ] **Step 5: 기본 테스트로 환경 검증**
 

@@ -18,6 +18,8 @@ class FakeRemote implements RemoteStore {
   @override
   Future<bool> signIn() async => _signedIn = true;
   @override
+  Future<bool> signInSilently() async => _signedIn;
+  @override
   Future<void> signOut() async => _signedIn = false;
   @override
   Future<void> upload(String json) async {
@@ -91,5 +93,17 @@ void main() {
     await service.setAutoBackup(true);
     final prefs = await SharedPreferences.getInstance();
     expect(prefs.getBool('auto_backup'), isTrue);
+  });
+
+  test('restoreSession: 세션 복원 성공 시 리스너 호출, 실패 시 호출 안 함', () async {
+    var notifyCount = 0;
+    service.addListener(() => notifyCount++);
+
+    await service.restoreSession(); // remote는 기본적으로 로그인 상태 → 성공
+    expect(notifyCount, 1);
+
+    await remote.signOut();
+    await service.restoreSession(); // 로그아웃 상태 → 복원 실패
+    expect(notifyCount, 1); // 변화 없음
   });
 }

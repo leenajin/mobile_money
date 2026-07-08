@@ -27,6 +27,10 @@ class BackupService extends ChangeNotifier {
     return ok;
   }
 
+  Future<void> restoreSession() async {
+    if (await remote.signInSilently()) notifyListeners();
+  }
+
   Future<void> signOut() async {
     await remote.signOut();
     await setAutoBackup(false);
@@ -62,7 +66,10 @@ class BackupService extends ChangeNotifier {
     notifyListeners();
     try {
       final json = await remote.download();
-      if (json == null) return false;
+      if (json == null) {
+        lastError = null;
+        return false;
+      }
       await importBackupJson(db, json);
       lastError = null;
       return true;

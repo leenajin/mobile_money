@@ -50,6 +50,16 @@ class PaymentMethodScreen extends StatelessWidget {
     if (ok == true) await state.removePaymentMethod(id);
   }
 
+  bool _isDuplicate(AppState state, String name, {int? excludingId}) {
+    return state.paymentMethods
+        .any((p) => p.name == name && p.id != excludingId);
+  }
+
+  void _showDuplicateWarning(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('이미 있는 이름입니다')));
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
@@ -58,7 +68,12 @@ class PaymentMethodScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final name = await _nameDialog(context);
-          if (name != null) await state.addPaymentMethod(name);
+          if (name == null) return;
+          if (_isDuplicate(state, name)) {
+            if (context.mounted) _showDuplicateWarning(context);
+            return;
+          }
+          await state.addPaymentMethod(name);
         },
         child: const Icon(Icons.add),
       ),
@@ -69,7 +84,12 @@ class PaymentMethodScreen extends StatelessWidget {
               title: Text(p.name),
               onTap: () async {
                 final name = await _nameDialog(context, initial: p.name);
-                if (name != null) await state.renamePaymentMethod(p.id!, name);
+                if (name == null) return;
+                if (_isDuplicate(state, name, excludingId: p.id)) {
+                  if (context.mounted) _showDuplicateWarning(context);
+                  return;
+                }
+                await state.renamePaymentMethod(p.id!, name);
               },
               trailing: p.isDefault
                   ? null
