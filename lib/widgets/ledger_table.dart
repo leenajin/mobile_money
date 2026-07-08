@@ -5,7 +5,7 @@ import '../models/expense.dart';
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
 const _rowNumColor = Color(0xFFF1F3F4);
-const _colWidths = [36.0, 96.0, 110.0, 80.0, 150.0, 96.0, 110.0];
+const _colFlexes = [6, 15, 16, 12, 20, 16, 15];
 
 class LedgerTable extends StatelessWidget {
   const LedgerTable({
@@ -25,47 +25,42 @@ class LedgerTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tableWidth = _colWidths.reduce((a, b) => a + b);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        width: tableWidth,
-        child: Column(
-          children: [
-            _headerRow(),
-            Expanded(
-              child: ListView.builder(
-                itemCount: rows.length + 1,
-                itemBuilder: (context, i) =>
-                    i < rows.length ? _dataRow(i) : _totalRow(),
-              ),
-            ),
-          ],
+    return Column(
+      children: [
+        _headerRow(),
+        Expanded(
+          child: ListView.builder(
+            itemCount: rows.length + 1,
+            itemBuilder: (context, i) =>
+                i < rows.length ? _dataRow(i) : _totalRow(),
+          ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _cell(int col, String text,
       {Color? bg, bool bold = false, bool right = false}) {
-    return Container(
-      width: _colWidths[col],
-      height: 36,
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      alignment: right ? Alignment.centerRight : Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: bg,
-        border: const Border(
-          right: BorderSide(color: _gridColor),
-          bottom: BorderSide(color: _gridColor),
+    return Expanded(
+      flex: _colFlexes[col],
+      child: Container(
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        alignment: right ? Alignment.centerRight : Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: bg,
+          border: const Border(
+            right: BorderSide(color: _gridColor),
+            bottom: BorderSide(color: _gridColor),
+          ),
         ),
+        child: Text(text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 11,
+                fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
       ),
-      child: Text(text,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-              fontSize: 13,
-              fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
     );
   }
 
