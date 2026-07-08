@@ -4,12 +4,13 @@ import '../logic/app_state.dart';
 import '../models/expense.dart';
 import '../widgets/ledger_table.dart';
 import '../widgets/month_tab_bar.dart';
+import 'expense_sheet.dart';
 
 class LedgerScreen extends StatelessWidget {
   const LedgerScreen({super.key});
 
   void _openExpenseSheet(BuildContext context, {Expense? existing}) {
-    // Task 9에서 showExpenseSheet 호출로 교체
+    showExpenseSheet(context, existing: existing);
   }
 
   void _openMenu(BuildContext context) {
