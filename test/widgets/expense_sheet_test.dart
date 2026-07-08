@@ -14,7 +14,7 @@ void main() {
 
   setUp(() async {
     db = await openAppDatabase(
-        factory: databaseFactoryFfi, path: inMemoryDatabasePath);
+        factory: databaseFactoryFfiNoIsolate, path: inMemoryDatabasePath);
     state = AppState(db, '2025-09-15');
     await state.init();
   });
