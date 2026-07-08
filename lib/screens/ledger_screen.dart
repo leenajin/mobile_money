@@ -5,6 +5,8 @@ import '../models/expense.dart';
 import '../widgets/ledger_table.dart';
 import '../widgets/month_tab_bar.dart';
 import 'expense_sheet.dart';
+import 'category_screen.dart';
+import 'payment_method_screen.dart';
 
 class LedgerScreen extends StatelessWidget {
   const LedgerScreen({super.key});
@@ -14,7 +16,32 @@ class LedgerScreen extends StatelessWidget {
   }
 
   void _openMenu(BuildContext context) {
-    // Task 10에서 분류/카드/설정 이동 메뉴로 교체
+    showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(
+            leading: const Icon(Icons.category),
+            title: const Text('분류 관리'),
+            onTap: () {
+              Navigator.pop(sheetContext);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const CategoryScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.credit_card),
+            title: const Text('카드 관리'),
+            onTap: () {
+              Navigator.pop(sheetContext);
+              Navigator.push(context,
+                  MaterialPageRoute(
+                      builder: (_) => const PaymentMethodScreen()));
+            },
+          ),
+        ]),
+      ),
+    );
   }
 
   @override
