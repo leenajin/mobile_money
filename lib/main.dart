@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'data/app_database.dart';
 import 'logic/app_state.dart';
 import 'screens/ledger_screen.dart';
+import 'sync/backup_service.dart';
+import 'sync/drive_sync.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final db = await openAppDatabase();
   final state = AppState(db);
   await state.init();
-  runApp(
-    ChangeNotifierProvider.value(value: state, child: const MobileMoneyApp()),
-  );
+  final backup = BackupService(
+      remote: DriveSync(),
+      db: db,
+      prefs: await SharedPreferences.getInstance());
+  state.onDataChanged = backup.onDataChanged;
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider.value(value: state),
+      ChangeNotifierProvider.value(value: backup),
+    ],
+    child: const MobileMoneyApp(),
+  ));
 }
 
 class MobileMoneyApp extends StatelessWidget {

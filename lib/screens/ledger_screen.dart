@@ -7,6 +7,7 @@ import '../widgets/month_tab_bar.dart';
 import 'expense_sheet.dart';
 import 'category_screen.dart';
 import 'payment_method_screen.dart';
+import 'settings_screen.dart';
 
 class LedgerScreen extends StatelessWidget {
   const LedgerScreen({super.key});
@@ -37,6 +38,15 @@ class LedgerScreen extends StatelessWidget {
               Navigator.push(context,
                   MaterialPageRoute(
                       builder: (_) => const PaymentMethodScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('설정'),
+            onTap: () {
+              Navigator.pop(sheetContext);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const SettingsScreen()));
             },
           ),
         ]),
