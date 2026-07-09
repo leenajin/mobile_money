@@ -49,4 +49,12 @@ void main() {
     expect(await repo.monthTotal('2025-09'), 300);
     expect(await repo.monthsWithData(), ['2025-08', '2025-09']);
   });
+
+  test('전체 월별 합계', () async {
+    expect(await repo.monthlyTotals(), isEmpty);
+    await repo.add(e('2025-09-01', 100));
+    await repo.add(e('2025-09-30', 200));
+    await repo.add(e('2025-08-15', 999));
+    expect(await repo.monthlyTotals(), {'2025-08': 999, '2025-09': 300});
+  });
 }

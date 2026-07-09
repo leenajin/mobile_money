@@ -23,6 +23,7 @@ class AppState extends ChangeNotifier {
   String selectedMonth = '';
   List<LedgerRow> rows = [];
   int monthTotal = 0;
+  Map<String, int> monthTotals = {}; // 월별 지출 추이 (거래 있는 달만)
   List<Category> categories = [];
   List<PaymentMethod> paymentMethods = [];
   void Function()? onDataChanged;
@@ -67,6 +68,7 @@ class AppState extends ChangeNotifier {
     if (!months.contains(selectedMonth)) selectedMonth = months.last;
     rows = buildLedgerRows(await _expenses.byMonth(selectedMonth));
     monthTotal = await _expenses.monthTotal(selectedMonth);
+    monthTotals = await _expenses.monthlyTotals();
     notifyListeners();
   }
 

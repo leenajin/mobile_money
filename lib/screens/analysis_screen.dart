@@ -5,6 +5,7 @@ import '../logic/app_state.dart';
 import '../widgets/month_tab_bar.dart';
 import 'analysis_calendar_tab.dart';
 import 'analysis_graph_tab.dart';
+import 'analysis_pattern_tab.dart';
 
 class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({super.key});
@@ -21,14 +22,24 @@ class AnalysisScreen extends StatelessWidget {
         aggregateTotals(expenses, (e) => e.categoryId, categoryNames);
 
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('분석'),
-          bottom: const TabBar(tabs: [Tab(text: '그래프'), Tab(text: '달력')]),
+          bottom: const TabBar(tabs: [
+            Tab(text: '그래프'),
+            Tab(text: '소비 패턴'),
+            Tab(text: '달력'),
+          ]),
         ),
         body: TabBarView(children: [
           AnalysisGraphTab(
+            expenses: expenses,
+            categoryEntries: categoryEntries,
+            paymentEntries: paymentEntries,
+            monthTotals: state.monthTotals,
+          ),
+          AnalysisPatternTab(
             expenses: expenses,
             categoryEntries: categoryEntries,
             paymentEntries: paymentEntries,

@@ -40,14 +40,11 @@ void main() {
         amount: 4500));
 
     await tester.pumpWidget(host());
-    await tester.tap(find.text('그래프'));
-    await tester.pumpAndSettle();
 
+    // 그래프 탭 (기본): 도넛 + 월별 추이
     expect(find.text('총 지출'), findsOneWidget);
     expect(find.text('₩34,500'), findsOneWidget);
-    expect(find.text('가장 큰 지출'), findsOneWidget);
-    expect(find.text('가장 지출이 많았던 날'), findsOneWidget);
-    expect(find.textContaining('회식'), findsWidgets);
+    expect(find.text('월별 소비 추이'), findsOneWidget);
 
     // 분류별 → 결제 수단별 전환
     expect(find.text('식사'), findsWidgets); // 분류 범례
@@ -55,6 +52,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('현금'), findsWidgets); // 결제 수단 범례로 전환됨
     expect(find.text('식사'), findsNothing);
+
+    // 소비 패턴 탭
+    await tester.tap(find.text('소비 패턴'));
+    await tester.pumpAndSettle();
+    expect(find.text('가장 큰 지출'), findsOneWidget);
+    expect(find.text('가장 지출이 많았던 날'), findsOneWidget);
+    expect(find.textContaining('회식'), findsWidgets);
   });
 
   testWidgets('달력 탭: 지출 있는 날에 금액 표시', (tester) async {

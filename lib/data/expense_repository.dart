@@ -35,4 +35,12 @@ class ExpenseRepository {
               "SELECT DISTINCT substr(date, 1, 7) AS ym FROM expenses ORDER BY ym"))
           .map((r) => r['ym'] as String)
           .toList();
+
+  /// 월('yyyy-MM') → 그 달 지출 합계 (거래 있는 달만)
+  Future<Map<String, int>> monthlyTotals() async => {
+        for (final r in await db.rawQuery(
+            "SELECT substr(date, 1, 7) AS ym, SUM(amount) AS total "
+            "FROM expenses GROUP BY ym ORDER BY ym"))
+          r['ym'] as String: r['total'] as int,
+      };
 }

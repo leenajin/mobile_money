@@ -43,6 +43,7 @@ void main() {
     expect(state.rows.length, 1); // 선택 월(9월) 것만
     expect(state.monthTotal, 12000);
     expect(state.months, ['2025-08', '2025-09']);
+    expect(state.monthTotals, {'2025-08': 5000, '2025-09': 12000});
     expect(notified, greaterThanOrEqualTo(2));
     expect(hookCalled, 2);
   });
