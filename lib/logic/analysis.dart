@@ -3,7 +3,8 @@ import '../models/expense.dart';
 class AnalysisEntry {
   final String name;
   final int total;
-  const AnalysisEntry(this.name, this.total);
+  final int? id; // 원본 분류/결제수단 id ('그 외' 등 합성 항목은 null)
+  const AnalysisEntry(this.name, this.total, {this.id});
 }
 
 /// 거래 목록을 idOf 기준으로 묶어 금액 합계를 구한다.
@@ -17,7 +18,7 @@ List<AnalysisEntry> aggregateTotals(List<Expense> expenses,
   final entries = [
     for (final entry in sums.entries)
       if (entry.value >= 1)
-        AnalysisEntry(names[entry.key] ?? '', entry.value),
+        AnalysisEntry(names[entry.key] ?? '', entry.value, id: entry.key),
   ]..sort((a, b) => b.total.compareTo(a.total));
   return entries;
 }
