@@ -4,7 +4,7 @@ import '../models/expense.dart';
 
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
-const _colFlexes = [15, 16, 12, 25, 16];
+const _colFlexes = [15, 16, 12, 28, 13];
 
 class LedgerTable extends StatelessWidget {
   const LedgerTable({
@@ -120,11 +120,27 @@ class LedgerTable extends StatelessWidget {
     );
   }
 
+  // 합계 행: 왼쪽에 '합계', 나머지 네 칸은 병합해 오른쪽 끝에 합계 금액
   Widget _totalRow() => Row(children: [
-        _cell(0, '', bg: _headerColor),
-        _cell(1, '', bg: _headerColor),
-        _cell(2, '', bg: _headerColor),
-        _cell(3, '합계', bg: _headerColor, bold: true),
-        _cell(4, formatWon(monthTotal), bg: _headerColor, bold: true, right: true),
+        _cell(0, '합계', bg: _headerColor, bold: true, center: true),
+        Expanded(
+          flex: _colFlexes[1] + _colFlexes[2] + _colFlexes[3] + _colFlexes[4],
+          child: Container(
+            height: 26,
+            padding: const EdgeInsets.symmetric(horizontal: 3),
+            alignment: Alignment.centerRight,
+            decoration: const BoxDecoration(
+              color: _headerColor,
+              border: Border(
+                right: BorderSide(color: _gridColor),
+                bottom: BorderSide(color: _gridColor),
+              ),
+            ),
+            child: Text(formatWon(monthTotal),
+                maxLines: 1,
+                style: const TextStyle(
+                    fontSize: 10, fontWeight: FontWeight.bold)),
+          ),
+        ),
       ]);
 }
