@@ -4,6 +4,8 @@ import '../logic/analysis.dart';
 import '../logic/app_state.dart';
 import '../logic/ledger_rows.dart';
 import '../widgets/month_tab_bar.dart';
+import 'analysis_calendar_tab.dart';
+import 'analysis_graph_tab.dart';
 
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
@@ -65,18 +67,36 @@ class AnalysisScreen extends StatelessWidget {
     final paymentNames = {for (final p in state.paymentMethods) p.id!: p.name};
     final categoryNames = {for (final c in state.categories) c.id!: c.name};
 
+    final paymentEntries =
+        aggregateTotals(expenses, (e) => e.paymentMethodId, paymentNames);
+    final categoryEntries =
+        aggregateTotals(expenses, (e) => e.categoryId, categoryNames);
+
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('분석'),
-          bottom: const TabBar(tabs: [Tab(text: '지출처'), Tab(text: '분류')]),
+          bottom: const TabBar(tabs: [
+            Tab(text: '지출처'),
+            Tab(text: '분류'),
+            Tab(text: '그래프'),
+            Tab(text: '달력'),
+          ]),
         ),
         body: TabBarView(children: [
-          _table('지출처',
-              aggregateTotals(expenses, (e) => e.paymentMethodId, paymentNames)),
-          _table('분류',
-              aggregateTotals(expenses, (e) => e.categoryId, categoryNames)),
+          _table('지출처', paymentEntries),
+          _table('분류', categoryEntries),
+          AnalysisGraphTab(
+            expenses: expenses,
+            categoryEntries: categoryEntries,
+            paymentEntries: paymentEntries,
+            categoryNames: categoryNames,
+          ),
+          AnalysisCalendarTab(
+            yearMonth: state.selectedMonth,
+            daily: dailyTotals(expenses),
+          ),
         ]),
         bottomNavigationBar: MonthTabBar(
           months: state.months,

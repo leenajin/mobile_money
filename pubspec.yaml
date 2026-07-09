@@ -43,6 +43,7 @@ dependencies:
   googleapis: ^13.2.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
   sqflite_common_ffi_web: ^1.1.2
+  fl_chart: ^1.2.0
 
 dev_dependencies:
   flutter_test:

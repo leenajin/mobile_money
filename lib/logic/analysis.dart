@@ -21,3 +21,40 @@ List<AnalysisEntry> aggregateTotals(List<Expense> expenses,
   ]..sort((a, b) => b.total.compareTo(a.total));
   return entries;
 }
+
+/// 날짜('yyyy-MM-dd') → 그날 지출 합계
+Map<String, int> dailyTotals(List<Expense> expenses) {
+  final totals = <String, int>{};
+  for (final e in expenses) {
+    totals[e.date] = (totals[e.date] ?? 0) + e.amount;
+  }
+  return totals;
+}
+
+/// 금액이 가장 큰 단일 지출 (없으면 null)
+Expense? maxExpense(List<Expense> expenses) {
+  Expense? max;
+  for (final e in expenses) {
+    if (max == null || e.amount > max.amount) max = e;
+  }
+  return max;
+}
+
+/// 지출 합계가 가장 큰 날 (없으면 null)
+MapEntry<String, int>? maxDay(Map<String, int> daily) {
+  MapEntry<String, int>? max;
+  for (final entry in daily.entries) {
+    if (max == null || entry.value > max.value) max = entry;
+  }
+  return max;
+}
+
+/// 원형 그래프 조각: 상위 maxSlices-1개 + 나머지는 '그 외'로 묶는다.
+List<AnalysisEntry> pieSlices(List<AnalysisEntry> entries,
+    {int maxSlices = 8}) {
+  if (entries.length <= maxSlices) return entries;
+  final top = entries.take(maxSlices - 1).toList();
+  final restTotal =
+      entries.skip(maxSlices - 1).fold(0, (sum, e) => sum + e.total);
+  return [...top, AnalysisEntry('그 외', restTotal)];
+}

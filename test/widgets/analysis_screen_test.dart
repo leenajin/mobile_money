@@ -62,4 +62,49 @@ void main() {
     expect(find.text('카페'), findsNothing); // 거래 없는 분류 미표시
     expect(find.text('편의점'), findsNothing);
   });
+
+  testWidgets('그래프 탭: 총 지출과 소비 패턴 표시', (tester) async {
+    final meal = state.categories.firstWhere((c) => c.name == '식사');
+    final cafe = state.categories.firstWhere((c) => c.name == '카페');
+    final cash = state.paymentMethods.first;
+    await state.addExpense(Expense(
+        date: '2025-09-01',
+        paymentMethodId: cash.id!,
+        categoryId: meal.id!,
+        detail: '회식',
+        amount: 30000));
+    await state.addExpense(Expense(
+        date: '2025-09-02',
+        paymentMethodId: cash.id!,
+        categoryId: cafe.id!,
+        amount: 4500));
+
+    await tester.pumpWidget(host());
+    await tester.tap(find.text('그래프'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('총 지출'), findsOneWidget);
+    expect(find.text('₩34,500'), findsOneWidget);
+    expect(find.text('가장 큰 지출'), findsOneWidget);
+    expect(find.text('가장 지출이 많았던 날'), findsOneWidget);
+    expect(find.textContaining('회식'), findsWidgets);
+  });
+
+  testWidgets('달력 탭: 지출 있는 날에 금액 표시', (tester) async {
+    final meal = state.categories.firstWhere((c) => c.name == '식사');
+    final cash = state.paymentMethods.first;
+    await state.addExpense(Expense(
+        date: '2025-09-05',
+        paymentMethodId: cash.id!,
+        categoryId: meal.id!,
+        amount: 7000));
+
+    await tester.pumpWidget(host());
+    await tester.tap(find.text('달력'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('7,000'), findsOneWidget);
+    expect(find.text('일'), findsOneWidget); // 요일 헤더
+    expect(find.text('30'), findsOneWidget); // 9월 마지막 날
+  });
 }
