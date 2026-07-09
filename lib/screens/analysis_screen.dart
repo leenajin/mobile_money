@@ -78,14 +78,14 @@ class AnalysisScreen extends StatelessWidget {
         appBar: AppBar(
           title: const Text('분석'),
           bottom: const TabBar(tabs: [
-            Tab(text: '지출처'),
+            Tab(text: '결제 수단'),
             Tab(text: '분류'),
             Tab(text: '그래프'),
             Tab(text: '달력'),
           ]),
         ),
         body: TabBarView(children: [
-          _table('지출처', paymentEntries),
+          _table('결제 수단', paymentEntries),
           _table('분류', categoryEntries),
           AnalysisGraphTab(
             expenses: expenses,

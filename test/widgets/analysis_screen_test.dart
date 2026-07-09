@@ -23,7 +23,7 @@ void main() {
   Widget host() => ChangeNotifierProvider.value(
       value: state, child: const MaterialApp(home: AnalysisScreen()));
 
-  testWidgets('지출처 탭: 거래 있는 지출처만 합산 표시', (tester) async {
+  testWidgets('결제 수단 탭: 거래 있는 결제 수단만 합산 표시', (tester) async {
     final meal = state.categories.firstWhere((c) => c.name == '식사');
     final cafe = state.categories.firstWhere((c) => c.name == '카페');
     final cash = state.paymentMethods.first;
@@ -39,7 +39,7 @@ void main() {
         amount: 4500));
 
     await tester.pumpWidget(host());
-    // 지출처 탭 (기본): 현금 16,500 합산
+    // 결제 수단 탭 (기본): 현금 16,500 합산
     expect(find.text('현금'), findsOneWidget);
     expect(find.text('₩16,500'), findsOneWidget);
   });
@@ -89,11 +89,11 @@ void main() {
     expect(find.text('가장 지출이 많았던 날'), findsOneWidget);
     expect(find.textContaining('회식'), findsWidgets);
 
-    // 분류별 → 지출처별 전환
+    // 분류별 → 결제 수단별 전환
     expect(find.text('식사'), findsWidgets); // 분류 범례
-    await tester.tap(find.text('지출처별'));
+    await tester.tap(find.text('결제 수단별'));
     await tester.pumpAndSettle();
-    expect(find.text('현금'), findsWidgets); // 지출처 범례로 전환됨
+    expect(find.text('현금'), findsWidgets); // 결제 수단 범례로 전환됨
     expect(find.text('식사'), findsNothing);
   });
 

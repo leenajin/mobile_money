@@ -73,7 +73,7 @@ class LedgerTable extends StatelessWidget {
 
   Widget _headerRow() => Row(children: [
         _cell(0, '날짜', bg: _headerColor, bold: true, center: true),
-        _cell(1, '지출처', bg: _headerColor, bold: true, center: true),
+        _cell(1, '결제 수단', bg: _headerColor, bold: true, center: true),
         _cell(2, '분류', bg: _headerColor, bold: true, center: true),
         _cell(3, '상세', bg: _headerColor, bold: true, center: true),
         _cell(4, '금액', bg: _headerColor, bold: true, center: true),

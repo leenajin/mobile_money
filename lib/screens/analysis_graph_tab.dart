@@ -36,7 +36,7 @@ class AnalysisGraphTab extends StatefulWidget {
 }
 
 class _AnalysisGraphTabState extends State<AnalysisGraphTab> {
-  bool byCategory = true; // true=분류별, false=지출처별
+  bool byCategory = true; // true=분류별, false=결제 수단별
 
   Color _sliceColor(int index, List<AnalysisEntry> slices) {
     if (slices[index].name == '그 외') return _otherColor;
@@ -61,12 +61,12 @@ class _AnalysisGraphTabState extends State<AnalysisGraphTab> {
     final dailyAverage = total ~/ daily.length;
 
     return ListView(padding: const EdgeInsets.all(16), children: [
-      // 분류별/지출처별 전환 버튼
+      // 분류별/결제 수단별 전환 버튼
       Center(
         child: SegmentedButton<bool>(
           segments: const [
             ButtonSegment(value: true, label: Text('분류별')),
-            ButtonSegment(value: false, label: Text('지출처별')),
+            ButtonSegment(value: false, label: Text('결제 수단별')),
           ],
           selected: {byCategory},
           onSelectionChanged: (s) => setState(() => byCategory = s.first),
@@ -146,7 +146,7 @@ class _AnalysisGraphTabState extends State<AnalysisGraphTab> {
             formatWon(categoryEntries.first.total)),
       if (paymentEntries.isNotEmpty)
         _statTile(
-            '가장 많이 쓴 지출처',
+            '가장 많이 쓴 결제 수단',
             '${paymentEntries.first.name} (${(paymentEntries.first.total * 100 / total).toStringAsFixed(1)}%)',
             formatWon(paymentEntries.first.total)),
       _statTile('하루 평균 지출 (지출 있는 날 기준)', '${daily.length}일 지출',

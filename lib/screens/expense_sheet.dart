@@ -137,7 +137,7 @@ class _ExpenseFormState extends State<_ExpenseForm> {
           DropdownButtonFormField<int>(
             key: const Key('payment'),
             initialValue: paymentMethodId,
-            decoration: const InputDecoration(labelText: '지출처 (카드/현금)'),
+            decoration: const InputDecoration(labelText: '결제 수단 (카드/현금)'),
             items: [
               for (final p in state.paymentMethods)
                 DropdownMenuItem(value: p.id, child: Text(p.name)),
