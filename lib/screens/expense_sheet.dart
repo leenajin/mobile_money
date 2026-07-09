@@ -170,7 +170,7 @@ class _ExpenseFormState extends State<_ExpenseForm> {
           TextField(
             key: const Key('memo'),
             controller: memoCtrl,
-            decoration: const InputDecoration(labelText: '비고 (선택)'),
+            decoration: const InputDecoration(labelText: '메모 (선택)'),
           ),
           const SizedBox(height: 16),
           Row(children: [
