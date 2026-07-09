@@ -4,7 +4,7 @@ import '../models/expense.dart';
 
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
-const _colFlexes = [15, 16, 12, 20, 16, 15];
+const _colFlexes = [15, 16, 12, 25, 16];
 
 class LedgerTable extends StatelessWidget {
   const LedgerTable({
@@ -71,8 +71,39 @@ class LedgerTable extends StatelessWidget {
         _cell(2, '분류', bg: _headerColor, bold: true, center: true),
         _cell(3, '상세', bg: _headerColor, bold: true, center: true),
         _cell(4, '금액', bg: _headerColor, bold: true, center: true),
-        _cell(5, '비고', bg: _headerColor, bold: true, center: true),
       ]);
+
+  // 상세 칸: 메모가 있으면 오른쪽 끝에 ⓘ 아이콘, 탭하면 메모 툴팁 표시
+  Widget _detailCell(Expense e) {
+    return Expanded(
+      flex: _colFlexes[3],
+      child: Container(
+        height: 26,
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        decoration: const BoxDecoration(
+          border: Border(
+            right: BorderSide(color: _gridColor),
+            bottom: BorderSide(color: _gridColor),
+          ),
+        ),
+        child: Row(children: [
+          Expanded(
+            child: Text(e.detail,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 10)),
+          ),
+          if (e.memo != null && e.memo!.isNotEmpty)
+            Tooltip(
+              message: e.memo!,
+              triggerMode: TooltipTriggerMode.tap,
+              child: const Icon(Icons.info_outline,
+                  size: 12, color: Colors.blueGrey),
+            ),
+        ]),
+      ),
+    );
+  }
 
   Widget _dataRow(int i) {
     final row = rows[i];
@@ -83,9 +114,8 @@ class LedgerTable extends StatelessWidget {
         _cell(0, row.showDate ? formatSheetDate(e.date) : ''),
         _cell(1, paymentNames[e.paymentMethodId] ?? ''),
         _cell(2, categoryNames[e.categoryId] ?? ''),
-        _cell(3, e.detail),
+        _detailCell(e),
         _cell(4, formatWon(e.amount), right: true),
-        _cell(5, e.memo ?? ''),
       ]),
     );
   }
@@ -96,6 +126,5 @@ class LedgerTable extends StatelessWidget {
         _cell(2, '', bg: _headerColor),
         _cell(3, '합계', bg: _headerColor, bold: true),
         _cell(4, formatWon(monthTotal), bg: _headerColor, bold: true, right: true),
-        _cell(5, '', bg: _headerColor),
       ]);
 }

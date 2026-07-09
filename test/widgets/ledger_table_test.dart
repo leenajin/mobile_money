@@ -28,14 +28,26 @@ void main() {
 
   testWidgets('헤더/데이터/합계가 표시된다', (tester) async {
     await tester.pumpWidget(build());
-    for (final h in ['날짜', '지출처', '분류', '상세', '금액', '비고']) {
+    for (final h in ['날짜', '지출처', '분류', '상세', '금액']) {
       expect(find.text(h), findsOneWidget);
     }
     expect(find.text('점심'), findsOneWidget);
     expect(find.text('₩12,000'), findsOneWidget);
-    expect(find.text('반값할인'), findsOneWidget);
     expect(find.text('합계'), findsOneWidget);
     expect(find.text('₩36,500'), findsOneWidget);
+  });
+
+  testWidgets('메모가 있는 행만 ⓘ 아이콘, 탭하면 툴팁으로 메모 표시', (tester) async {
+    await tester.pumpWidget(build());
+    // 메모 텍스트는 표에 직접 보이지 않는다
+    expect(find.text('반값할인'), findsNothing);
+    // 메모가 있는 거래(커피)에만 아이콘 하나
+    final icon = find.byIcon(Icons.info_outline);
+    expect(icon, findsOneWidget);
+    // 아이콘 탭 → 툴팁으로 메모 표시
+    await tester.tap(icon);
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('반값할인'), findsOneWidget);
   });
 
   testWidgets('같은 날짜는 첫 행만 날짜 표시', (tester) async {
