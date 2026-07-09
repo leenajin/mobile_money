@@ -7,13 +7,13 @@ class MonthTabBar extends StatelessWidget {
     required this.months,
     required this.selected,
     required this.onSelect,
-    required this.onMenuTap,
+    this.onMenuTap, // null이면 메뉴 버튼을 숨긴다 (분석 화면 등)
   });
 
   final List<String> months;
   final String selected;
   final void Function(String) onSelect;
-  final VoidCallback onMenuTap;
+  final VoidCallback? onMenuTap;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,8 @@ class MonthTabBar extends StatelessWidget {
       child: SizedBox(
         height: 52,
         child: Row(children: [
-          IconButton(icon: const Icon(Icons.menu), onPressed: onMenuTap),
+          if (onMenuTap != null)
+            IconButton(icon: const Icon(Icons.menu), onPressed: onMenuTap),
           Expanded(
             child: ListView(
               scrollDirection: Axis.horizontal,

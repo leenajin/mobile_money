@@ -4,6 +4,7 @@ import '../logic/app_state.dart';
 import '../models/expense.dart';
 import '../widgets/ledger_table.dart';
 import '../widgets/month_tab_bar.dart';
+import 'analysis_screen.dart';
 import 'expense_sheet.dart';
 import 'category_screen.dart';
 import 'payment_method_screen.dart';
@@ -21,6 +22,15 @@ class LedgerScreen extends StatelessWidget {
       context: context,
       builder: (sheetContext) => SafeArea(
         child: Column(mainAxisSize: MainAxisSize.min, children: [
+          ListTile(
+            leading: const Icon(Icons.bar_chart),
+            title: const Text('분석'),
+            onTap: () {
+              Navigator.pop(sheetContext);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const AnalysisScreen()));
+            },
+          ),
           ListTile(
             leading: const Icon(Icons.category),
             title: const Text('분류 관리'),
