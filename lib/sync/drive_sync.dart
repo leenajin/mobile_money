@@ -85,3 +85,32 @@ class DriveSync implements RemoteStore {
     return utf8.decode(bytes);
   }
 }
+
+/// 웹 미리보기용 빈 구현 — 웹에는 OAuth 클라이언트 ID가 없어
+/// GoogleSignIn을 만들면 초기화 오류가 나므로 드라이브 기능을 비활성화한다.
+class NoopRemote implements RemoteStore {
+  @override
+  bool get signedIn => false;
+
+  @override
+  String? get accountEmail => null;
+
+  @override
+  Future<bool> signIn() async => false;
+
+  @override
+  Future<bool> signInSilently() async => false;
+
+  @override
+  Future<void> signOut() async {}
+
+  @override
+  Future<void> upload(String json) async {
+    throw UnsupportedError('웹 미리보기에서는 드라이브 백업을 지원하지 않습니다');
+  }
+
+  @override
+  Future<String?> download() async {
+    throw UnsupportedError('웹 미리보기에서는 드라이브 백업을 지원하지 않습니다');
+  }
+}

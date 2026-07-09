@@ -4,8 +4,7 @@ import '../models/expense.dart';
 
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
-const _rowNumColor = Color(0xFFF1F3F4);
-const _colFlexes = [6, 15, 16, 12, 20, 16, 15];
+const _colFlexes = [15, 16, 12, 20, 16, 15];
 
 class LedgerTable extends StatelessWidget {
   const LedgerTable({
@@ -67,13 +66,12 @@ class LedgerTable extends StatelessWidget {
   }
 
   Widget _headerRow() => Row(children: [
-        _cell(0, '', bg: _rowNumColor),
-        _cell(1, '날짜', bg: _headerColor, bold: true, center: true),
-        _cell(2, '카드', bg: _headerColor, bold: true, center: true),
-        _cell(3, '사용용도', bg: _headerColor, bold: true, center: true),
-        _cell(4, '상세', bg: _headerColor, bold: true, center: true),
-        _cell(5, '금액', bg: _headerColor, bold: true, center: true),
-        _cell(6, '비고', bg: _headerColor, bold: true, center: true),
+        _cell(0, '날짜', bg: _headerColor, bold: true, center: true),
+        _cell(1, '지출처', bg: _headerColor, bold: true, center: true),
+        _cell(2, '분류', bg: _headerColor, bold: true, center: true),
+        _cell(3, '상세', bg: _headerColor, bold: true, center: true),
+        _cell(4, '금액', bg: _headerColor, bold: true, center: true),
+        _cell(5, '비고', bg: _headerColor, bold: true, center: true),
       ]);
 
   Widget _dataRow(int i) {
@@ -82,24 +80,22 @@ class LedgerTable extends StatelessWidget {
     return InkWell(
       onTap: () => onRowTap(e),
       child: Row(children: [
-        _cell(0, '${i + 1}', bg: _rowNumColor, center: true),
-        _cell(1, row.showDate ? formatSheetDate(e.date) : ''),
-        _cell(2, paymentNames[e.paymentMethodId] ?? ''),
-        _cell(3, categoryNames[e.categoryId] ?? ''),
-        _cell(4, e.detail),
-        _cell(5, formatWon(e.amount), right: true),
-        _cell(6, e.memo ?? ''),
+        _cell(0, row.showDate ? formatSheetDate(e.date) : ''),
+        _cell(1, paymentNames[e.paymentMethodId] ?? ''),
+        _cell(2, categoryNames[e.categoryId] ?? ''),
+        _cell(3, e.detail),
+        _cell(4, formatWon(e.amount), right: true),
+        _cell(5, e.memo ?? ''),
       ]),
     );
   }
 
   Widget _totalRow() => Row(children: [
-        _cell(0, '', bg: _rowNumColor),
+        _cell(0, '', bg: _headerColor),
         _cell(1, '', bg: _headerColor),
         _cell(2, '', bg: _headerColor),
-        _cell(3, '', bg: _headerColor),
-        _cell(4, '합계', bg: _headerColor, bold: true),
-        _cell(5, formatWon(monthTotal), bg: _headerColor, bold: true, right: true),
-        _cell(6, '', bg: _headerColor),
+        _cell(3, '합계', bg: _headerColor, bold: true),
+        _cell(4, formatWon(monthTotal), bg: _headerColor, bold: true, right: true),
+        _cell(5, '', bg: _headerColor),
       ]);
 }

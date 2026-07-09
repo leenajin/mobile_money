@@ -19,7 +19,7 @@ Future<void> main() async {
   final state = AppState(db);
   await state.init();
   final backup = BackupService(
-      remote: DriveSync(),
+      remote: kIsWeb ? NoopRemote() : DriveSync(),
       db: db,
       prefs: await SharedPreferences.getInstance());
   state.onDataChanged = backup.onDataChanged;

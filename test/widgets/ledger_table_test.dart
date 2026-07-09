@@ -28,7 +28,7 @@ void main() {
 
   testWidgets('헤더/데이터/합계가 표시된다', (tester) async {
     await tester.pumpWidget(build());
-    for (final h in ['날짜', '카드', '사용용도', '상세', '금액', '비고']) {
+    for (final h in ['날짜', '지출처', '분류', '상세', '금액', '비고']) {
       expect(find.text(h), findsOneWidget);
     }
     expect(find.text('점심'), findsOneWidget);
