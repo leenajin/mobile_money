@@ -17,7 +17,7 @@ const chartPalette = [
 ];
 const _otherColor = Color(0xFF9E9E9E); // '그 외' 전용 회색
 
-class AnalysisGraphTab extends StatelessWidget {
+class AnalysisGraphTab extends StatefulWidget {
   const AnalysisGraphTab({
     super.key,
     required this.expenses,
@@ -31,6 +31,13 @@ class AnalysisGraphTab extends StatelessWidget {
   final List<AnalysisEntry> paymentEntries;
   final Map<int, String> categoryNames;
 
+  @override
+  State<AnalysisGraphTab> createState() => _AnalysisGraphTabState();
+}
+
+class _AnalysisGraphTabState extends State<AnalysisGraphTab> {
+  bool byCategory = true; // true=분류별, false=지출처별
+
   Color _sliceColor(int index, List<AnalysisEntry> slices) {
     if (slices[index].name == '그 외') return _otherColor;
     return chartPalette[index % chartPalette.length];
@@ -38,18 +45,38 @@ class AnalysisGraphTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final expenses = widget.expenses;
+    final categoryEntries = widget.categoryEntries;
+    final paymentEntries = widget.paymentEntries;
+    final categoryNames = widget.categoryNames;
+
     if (expenses.isEmpty) {
       return const Center(child: Text('이번 달 지출이 없습니다'));
     }
     final total = expenses.fold(0, (sum, e) => sum + e.amount);
-    final slices = pieSlices(categoryEntries);
+    final slices = pieSlices(byCategory ? categoryEntries : paymentEntries);
     final daily = dailyTotals(expenses);
     final biggest = maxExpense(expenses)!;
     final busiest = maxDay(daily)!;
     final dailyAverage = total ~/ daily.length;
 
     return ListView(padding: const EdgeInsets.all(16), children: [
-      // 분류별 사용률 도넛 (중앙 = 총 지출)
+      // 분류별/지출처별 전환 버튼
+      Center(
+        child: SegmentedButton<bool>(
+          segments: const [
+            ButtonSegment(value: true, label: Text('분류별')),
+            ButtonSegment(value: false, label: Text('지출처별')),
+          ],
+          selected: {byCategory},
+          onSelectionChanged: (s) => setState(() => byCategory = s.first),
+          style: const ButtonStyle(
+              visualDensity: VisualDensity.compact,
+              textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 12))),
+        ),
+      ),
+      const SizedBox(height: 12),
+      // 사용률 도넛 (중앙 = 총 지출)
       SizedBox(
         height: 200,
         child: Stack(alignment: Alignment.center, children: [

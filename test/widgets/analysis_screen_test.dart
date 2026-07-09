@@ -88,6 +88,13 @@ void main() {
     expect(find.text('가장 큰 지출'), findsOneWidget);
     expect(find.text('가장 지출이 많았던 날'), findsOneWidget);
     expect(find.textContaining('회식'), findsWidgets);
+
+    // 분류별 → 지출처별 전환
+    expect(find.text('식사'), findsWidgets); // 분류 범례
+    await tester.tap(find.text('지출처별'));
+    await tester.pumpAndSettle();
+    expect(find.text('현금'), findsWidgets); // 지출처 범례로 전환됨
+    expect(find.text('식사'), findsNothing);
   });
 
   testWidgets('달력 탭: 지출 있는 날에 금액 표시', (tester) async {
