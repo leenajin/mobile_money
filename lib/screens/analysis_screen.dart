@@ -43,17 +43,17 @@ class AnalysisScreen extends StatelessWidget {
   Widget _table(String label, List<AnalysisEntry> entries) {
     return Column(children: [
       Row(children: [
-        _cell(label, flex: 3, bg: _headerColor, bold: true, center: true),
+        _cell(label, flex: 2, bg: _headerColor, bold: true, center: true),
         _cell('금액', flex: 2, bg: _headerColor, bold: true, center: true),
-        _cell('비고', flex: 2, bg: _headerColor, bold: true, center: true),
+        _cell('비고', flex: 3, bg: _headerColor, bold: true, center: true),
       ]),
       Expanded(
         child: ListView.builder(
           itemCount: entries.length,
           itemBuilder: (context, i) => Row(children: [
-            _cell(entries[i].name, flex: 3),
+            _cell(entries[i].name, flex: 2),
             _cell(formatWon(entries[i].total), flex: 2, right: true),
-            _cell('', flex: 2),
+            _cell('', flex: 3),
           ]),
         ),
       ),
