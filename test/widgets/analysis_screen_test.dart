@@ -113,5 +113,10 @@ void main() {
     expect(find.text('7,000'), findsOneWidget);
     expect(find.text('일'), findsOneWidget); // 요일 헤더
     expect(find.text('30'), findsOneWidget); // 9월 마지막 날
+
+    // 지출 있는 날짜를 탭하면 메인 장부 스크롤 요청이 기록된다
+    await tester.tap(find.text('7,000'));
+    await tester.pumpAndSettle();
+    expect(state.pendingScrollDate, '2025-09-05');
   });
 }

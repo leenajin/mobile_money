@@ -17,10 +17,12 @@ class AnalysisCalendarTab extends StatelessWidget {
     super.key,
     required this.yearMonth, // 'yyyy-MM'
     required this.daily, // 'yyyy-MM-dd' -> 합계
+    this.onDayTap, // 지출 있는 날짜를 탭하면 호출 ('yyyy-MM-dd')
   });
 
   final String yearMonth;
   final Map<String, int> daily;
+  final void Function(String date)? onDayTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +35,8 @@ class AnalysisCalendarTab extends StatelessWidget {
     final won = NumberFormat('#,###');
 
     Widget dayCell(int day) {
-      final total = daily[
-          '$yearMonth-${day.toString().padLeft(2, '0')}'];
+      final date = '$yearMonth-${day.toString().padLeft(2, '0')}';
+      final total = daily[date];
       Color? bg;
       var textColor = Colors.black87;
       if (total != null && maxTotal > 0) {
@@ -43,7 +45,7 @@ class AnalysisCalendarTab extends StatelessWidget {
         bg = _heatRamp[step];
         if (step >= 2) textColor = Colors.white; // 어두운 칸은 흰 글씨
       }
-      return Container(
+      final cell = Container(
         decoration: BoxDecoration(
           color: bg,
           border: Border.all(color: _gridColor, width: 0.5),
@@ -63,6 +65,9 @@ class AnalysisCalendarTab extends StatelessWidget {
             ),
         ]),
       );
+      // 지출이 있는 날만 탭 가능 — 메인 장부의 해당 날짜로 이동
+      if (total == null || onDayTap == null) return cell;
+      return InkWell(onTap: () => onDayTap!(date), child: cell);
     }
 
     return Padding(

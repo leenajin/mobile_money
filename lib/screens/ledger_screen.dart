@@ -75,6 +75,8 @@ class LedgerScreen extends StatelessWidget {
           categoryNames: {for (final c in state.categories) c.id!: c.name},
           paymentNames: {for (final p in state.paymentMethods) p.id!: p.name},
           onRowTap: (e) => _openExpenseSheet(context, existing: e),
+          scrollToDate: state.pendingScrollDate,
+          onScrollHandled: state.clearPendingScroll,
         ),
       ),
       floatingActionButton: FloatingActionButton(

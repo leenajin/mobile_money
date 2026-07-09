@@ -8,7 +8,9 @@ const _gridColor = Color(0xFFD0D0D0);
 const _dateColWidth = 62.0;
 const _colFlexes = [0, 16, 12, 28, 13];
 
-class LedgerTable extends StatelessWidget {
+const _rowHeight = 26.0;
+
+class LedgerTable extends StatefulWidget {
   const LedgerTable({
     super.key,
     required this.rows,
@@ -16,6 +18,8 @@ class LedgerTable extends StatelessWidget {
     required this.categoryNames,
     required this.paymentNames,
     required this.onRowTap,
+    this.scrollToDate, // 이 날짜의 첫 행으로 스크롤 (달력에서 이동 시)
+    this.onScrollHandled, // 스크롤 처리 후 호출 (요청 클리어용)
   });
 
   final List<LedgerRow> rows;
@@ -23,14 +27,53 @@ class LedgerTable extends StatelessWidget {
   final Map<int, String> categoryNames;
   final Map<int, String> paymentNames;
   final void Function(Expense) onRowTap;
+  final String? scrollToDate;
+  final VoidCallback? onScrollHandled;
+
+  @override
+  State<LedgerTable> createState() => _LedgerTableState();
+}
+
+class _LedgerTableState extends State<LedgerTable> {
+  final _controller = ScrollController();
+
+  List<LedgerRow> get rows => widget.rows;
+  int get monthTotal => widget.monthTotal;
+  Map<int, String> get categoryNames => widget.categoryNames;
+  Map<int, String> get paymentNames => widget.paymentNames;
+  void Function(Expense) get onRowTap => widget.onRowTap;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _maybeScroll() {
+    final target = widget.scrollToDate;
+    if (target == null) return;
+    final index = rows.indexWhere((r) => r.expense.date == target);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (index >= 0 && _controller.hasClients) {
+        _controller.animateTo(
+          (index * _rowHeight).clamp(0.0, _controller.position.maxScrollExtent),
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+      widget.onScrollHandled?.call();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _maybeScroll();
     return Column(
       children: [
         _headerRow(),
         Expanded(
           child: ListView.builder(
+            controller: _controller,
             itemCount: rows.length + 1,
             itemBuilder: (context, i) =>
                 i < rows.length ? _dataRow(i) : _totalRow(),

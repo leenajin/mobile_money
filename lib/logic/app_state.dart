@@ -27,6 +27,19 @@ class AppState extends ChangeNotifier {
   List<PaymentMethod> paymentMethods = [];
   void Function()? onDataChanged;
 
+  /// 장부 표가 이 날짜 행으로 스크롤해야 함 (달력 탭에서 요청)
+  String? pendingScrollDate;
+
+  void requestScrollTo(String date) {
+    pendingScrollDate = date;
+    notifyListeners();
+  }
+
+  /// 스크롤 처리 후 요청을 지운다 (알림 없이)
+  void clearPendingScroll() {
+    pendingScrollDate = null;
+  }
+
   String get today {
     if (_today != null) return _today;
     final now = DateTime.now();

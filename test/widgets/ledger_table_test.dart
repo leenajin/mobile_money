@@ -62,4 +62,38 @@ void main() {
     await tester.tap(find.text('커피'));
     expect(tapped?.id, 2);
   });
+
+  testWidgets('scrollToDate가 지정되면 해당 날짜 행으로 스크롤', (tester) async {
+    final many = [
+      for (var d = 1; d <= 30; d++)
+        Expense(
+            id: d,
+            date: '2025-09-${d.toString().padLeft(2, '0')}',
+            paymentMethodId: 1,
+            categoryId: 1,
+            detail: '항목$d',
+            amount: 1000),
+    ];
+    var handled = false;
+    await tester.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: SizedBox(
+          height: 200,
+          child: LedgerTable(
+            rows: buildLedgerRows(many),
+            monthTotal: 30000,
+            categoryNames: const {1: '식사'},
+            paymentNames: const {1: '현금'},
+            onRowTap: (_) {},
+            scrollToDate: '2025-09-28',
+            onScrollHandled: () => handled = true,
+          ),
+        ),
+      ),
+    ));
+    expect(find.text('항목28'), findsNothing); // 스크롤 전에는 화면 밖
+    await tester.pumpAndSettle(); // 스크롤 애니메이션 완료
+    expect(handled, isTrue);
+    expect(find.text('항목28'), findsOneWidget);
+  });
 }

@@ -96,6 +96,10 @@ class AnalysisScreen extends StatelessWidget {
           AnalysisCalendarTab(
             yearMonth: state.selectedMonth,
             daily: dailyTotals(expenses),
+            onDayTap: (date) {
+              context.read<AppState>().requestScrollTo(date);
+              Navigator.pop(context); // 메인 장부로 복귀 → 해당 날짜로 스크롤
+            },
           ),
         ]),
         bottomNavigationBar: MonthTabBar(
