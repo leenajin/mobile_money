@@ -64,20 +64,55 @@ class LedgerScreen extends StatelessWidget {
     );
   }
 
+  Widget _topButton(BuildContext context, String label,
+      {VoidCallback? onPressed}) {
+    return OutlinedButton(
+      onPressed: onPressed ?? () {}, // 기능 미정 버튼은 아직 동작 없음
+      style: OutlinedButton.styleFrom(
+        visualDensity: VisualDensity.compact,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        textStyle: const TextStyle(fontSize: 12),
+      ),
+      child: Text(label),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AppState>();
     return Scaffold(
       body: SafeArea(
-        child: LedgerTable(
-          rows: state.rows,
-          monthTotal: state.monthTotal,
-          categoryNames: {for (final c in state.categories) c.id!: c.name},
-          paymentNames: {for (final p in state.paymentMethods) p.id!: p.name},
-          onRowTap: (e) => _openExpenseSheet(context, existing: e),
-          scrollToDate: state.pendingScrollDate,
-          onScrollHandled: state.clearPendingScroll,
-        ),
+        child: Column(children: [
+          // 상단 버튼 4개 (분석 외 나머지는 자리만 — 기능 미정)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
+            child: Row(children: [
+              Expanded(child: _topButton(context, '분석', onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const AnalysisScreen()));
+              })),
+              const SizedBox(width: 6),
+              Expanded(child: _topButton(context, '버튼2')),
+              const SizedBox(width: 6),
+              Expanded(child: _topButton(context, '버튼3')),
+              const SizedBox(width: 6),
+              Expanded(child: _topButton(context, '버튼4')),
+            ]),
+          ),
+          Expanded(
+            child: LedgerTable(
+              rows: state.rows,
+              monthTotal: state.monthTotal,
+              categoryNames: {for (final c in state.categories) c.id!: c.name},
+              paymentNames: {
+                for (final p in state.paymentMethods) p.id!: p.name
+              },
+              onRowTap: (e) => _openExpenseSheet(context, existing: e),
+              scrollToDate: state.pendingScrollDate,
+              onScrollHandled: state.clearPendingScroll,
+            ),
+          ),
+        ]),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _openExpenseSheet(context),
