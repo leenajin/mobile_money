@@ -21,10 +21,7 @@ final _won = NumberFormat('#,###');
 
 String formatWon(int amount) => '₩${_won.format(amount)}';
 
-String formatSheetDate(String date) {
-  final parts = date.split('-');
-  return '${parts[0]}. ${int.parse(parts[1])}. ${int.parse(parts[2])}';
-}
+String formatSheetDate(String date) => date.replaceAll('-', '.');
 
 String monthLabel(String yearMonth) {
   final parts = yearMonth.split('-');

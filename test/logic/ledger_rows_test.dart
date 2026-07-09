@@ -23,8 +23,8 @@ void main() {
     expect(formatWon(9400), '₩9,400');
     expect(formatWon(3000000), '₩3,000,000');
     expect(formatWon(0), '₩0');
-    expect(formatSheetDate('2025-09-01'), '2025. 9. 1');
-    expect(formatSheetDate('2025-12-25'), '2025. 12. 25');
+    expect(formatSheetDate('2025-09-01'), '2025.09.01');
+    expect(formatSheetDate('2025-12-25'), '2025.12.25');
     expect(monthLabel('2025-09'), '2025.9');
   });
 }

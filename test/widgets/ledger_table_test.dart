@@ -52,8 +52,8 @@ void main() {
 
   testWidgets('같은 날짜는 첫 행만 날짜 표시', (tester) async {
     await tester.pumpWidget(build());
-    expect(find.text('2025. 9. 1'), findsOneWidget); // 두 거래지만 한 번만
-    expect(find.text('2025. 9. 2'), findsOneWidget);
+    expect(find.text('2025.09.01'), findsOneWidget); // 두 거래지만 한 번만
+    expect(find.text('2025.09.02'), findsOneWidget);
   });
 
   testWidgets('행 탭 시 해당 거래 전달', (tester) async {

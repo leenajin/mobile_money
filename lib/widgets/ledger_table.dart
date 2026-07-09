@@ -4,7 +4,9 @@ import '../models/expense.dart';
 
 const _headerColor = Color(0xFFFFF3C4);
 const _gridColor = Color(0xFFD0D0D0);
-const _colFlexes = [15, 16, 12, 28, 13];
+// [0]=날짜는 고정폭(_dateColWidth), 나머지가 남은 폭을 비율로 나눈다
+const _dateColWidth = 62.0;
+const _colFlexes = [0, 16, 12, 28, 13];
 
 class LedgerTable extends StatelessWidget {
   const LedgerTable({
@@ -40,9 +42,15 @@ class LedgerTable extends StatelessWidget {
 
   Widget _cell(int col, String text,
       {Color? bg, bool bold = false, bool right = false, bool center = false}) {
-    return Expanded(
-      flex: _colFlexes[col],
-      child: Container(
+    final content =
+        _cellBox(text, bg: bg, bold: bold, right: right, center: center);
+    if (col == 0) return SizedBox(width: _dateColWidth, child: content);
+    return Expanded(flex: _colFlexes[col], child: content);
+  }
+
+  Widget _cellBox(String text,
+      {Color? bg, bool bold = false, bool right = false, bool center = false}) {
+    return Container(
         height: 26,
         padding: const EdgeInsets.symmetric(horizontal: 3),
         alignment: center
@@ -60,9 +68,7 @@ class LedgerTable extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
                 fontSize: 10,
-                fontWeight: bold ? FontWeight.bold : FontWeight.normal)),
-      ),
-    );
+                fontWeight: bold ? FontWeight.bold : FontWeight.normal)));
   }
 
   Widget _headerRow() => Row(children: [
