@@ -64,16 +64,29 @@ class LedgerScreen extends StatelessWidget {
     );
   }
 
+  // + 버튼(FAB)과 같은 계열의 색·그림자를 가진 납작한 직사각형 버튼
   Widget _topButton(BuildContext context, String label,
       {VoidCallback? onPressed}) {
-    return OutlinedButton(
-      onPressed: onPressed ?? () {}, // 기능 미정 버튼은 아직 동작 없음
-      style: OutlinedButton.styleFrom(
-        visualDensity: VisualDensity.compact,
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        textStyle: const TextStyle(fontSize: 12),
+    final scheme = Theme.of(context).colorScheme;
+    return SizedBox(
+      height: 30,
+      child: ElevatedButton(
+        onPressed: onPressed ?? () {}, // 기능 미정 버튼은 아직 동작 없음
+        style: ElevatedButton.styleFrom(
+          backgroundColor: scheme.primaryContainer,
+          foregroundColor: scheme.onPrimaryContainer,
+          elevation: 3,
+          shadowColor: Colors.black45,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          minimumSize: Size.zero,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          textStyle:
+              const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+        ),
+        child: Text(label),
       ),
-      child: Text(label),
     );
   }
 
