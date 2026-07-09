@@ -5,6 +5,7 @@ import '../models/expense.dart';
 import '../widgets/ledger_table.dart';
 import '../widgets/month_tab_bar.dart';
 import 'analysis_screen.dart';
+import 'summary_screen.dart';
 import 'expense_sheet.dart';
 import 'category_screen.dart';
 import 'payment_method_screen.dart';
@@ -105,7 +106,10 @@ class LedgerScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const AnalysisScreen()));
               })),
               const SizedBox(width: 6),
-              Expanded(child: _topButton(context, '버튼2')),
+              Expanded(child: _topButton(context, '모아보기', onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const SummaryScreen()));
+              })),
               const SizedBox(width: 6),
               Expanded(child: _topButton(context, '버튼3')),
               const SizedBox(width: 6),
